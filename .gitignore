@@ -1,0 +1,6 @@
+# Исполняемые файлы Windows
+*.exe
+
+# Файлы IDE
+.vscode/
+.idea/

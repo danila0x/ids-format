@@ -12,6 +12,8 @@ func main() {
 	quote := flag.String("q", "none", "Тип кавычек: none, single, double")
 	separator := flag.String("sep", ", ", "Разделитель")
 	sepType := flag.String("sep-type", "custom", "Тип разделителя: comma, space, newLine, sql, custom")
+	sql := flag.Bool("sql", false, "Режим SQL запроса: true or false")
+	table := flag.String("table", "", "Имя таблицы для SQL запроса")
 	flag.Parse()
 
 	var ids []string
@@ -86,8 +88,18 @@ func main() {
 	default:
 		finalSeparator = *separator
 	}
+	var output string
+	if *sql {
+		idList := "(" + strings.Join(result, ", ") + ")"
 
-	output := strings.Join(result, finalSeparator)
+		if *table != "" {
+			output = fmt.Sprintf("SELECT * FROM %s WHERE id IN %s", *table, idList)
+		} else {
+			output = idList
+		}
+	} else {
+		output = strings.Join(result, finalSeparator)
+	}
 	fmt.Println(output)
 	fmt.Println("Обработано IDs: ", countIds)
 }

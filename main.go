@@ -14,6 +14,7 @@ func main() {
 	sepType := flag.String("sep-type", "custom", "Тип разделителя: comma, space, newLine, sql, custom")
 	sql := flag.Bool("sql", false, "Режим SQL запроса: true or false")
 	table := flag.String("table", "", "Имя таблицы для SQL запроса")
+	column := flag.String("column", "id", "Имя колонки для SQL запроса (по умолчанию 'id')")
 	flag.Parse()
 
 	var ids []string
@@ -43,12 +44,17 @@ func main() {
 
 	if len(ids) == 0 {
 		fmt.Println("ID не переданы")
-		fmt.Println("Пример: ids.exe -quote single 12312312 232131 334332")
+		fmt.Println("Пример: ids.exe -q single 12312312 232131 334332")
 		fmt.Println("Примеры разделителей:")
 		fmt.Println("  -sep-type comma   -> 1, 2, 3")
 		fmt.Println("  -sep-type space   -> 1 2 3")
 		fmt.Println("  -sep-type newline -> 1\\n2\\n3")
 		fmt.Println("  -sep-type sql     -> 1,\\n2,\\n3")
+		fmt.Println("\nSQL режим:")
+		fmt.Println("  -sql                - включить формирование SQL запроса")
+		fmt.Println("  -table имя_таблицы  - указать таблицу")
+		fmt.Println("  -column имя_колонки - указать колонку (по умолчанию 'id')")
+		fmt.Println("  Пример: ids.exe -sql -table users -column user_id 123 456")
 		flag.PrintDefaults()
 		return
 	}
@@ -88,12 +94,14 @@ func main() {
 	default:
 		finalSeparator = *separator
 	}
+
 	var output string
+
 	if *sql {
 		idList := "(" + strings.Join(result, ", ") + ")"
 
 		if *table != "" {
-			output = fmt.Sprintf("SELECT * FROM %s WHERE id IN %s", *table, idList)
+			output = fmt.Sprintf("SELECT * FROM %s WHERE %s IN %s", *table, *column, idList)
 		} else {
 			output = idList
 		}

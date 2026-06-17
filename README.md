@@ -73,16 +73,16 @@ SQL режим:
   -table имя_таблицы  - указать таблицу
   -column имя_колонки - указать колонку (по умолчанию 'id')
   Пример: ids.exe -sql -table users -column user_id 123 456
-  -trim-ext .xml    - удалить расширение .xml у файлов
-  -trim-ext .xml,.txt - удалить несколько расширений
+  -trim-ext .txt    - удалить расширение .txt у файлов
+  -trim-ext .png,.txt - удалить несколько расширений
   -column string
-        Имя колонки для SQL запроса (по умолчанию 'id') (default "id")
+        Имя колонки для SQL запроса (по умолчанию 'id')
   -q string
         Тип кавычек: none, single, double (default "none")
   -sep string
         Разделитель (default ", ")
   -sep-type string
-        Тип разделителя: comma, space, newLine, sql, custom (default "custom")
+        Тип разделителя: comma, space, newLine, sql, custom
   -sql
         Режим SQL запроса: true or false
   -table string
@@ -90,6 +90,6 @@ SQL режим:
   -trim-all-ext
         Удалить все расширения файлов
   -trim-ext string
-        Удалить расширение файлов (например: .xml, .txt)
+        Удалить расширение файлов (например: .png, .txt)
 
 ```

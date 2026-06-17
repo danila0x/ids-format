@@ -53,3 +53,43 @@ Output:
 SELECT * FROM users WHERE id IN ('444', '43423', '77777', '343', '888875')
 Обработано IDs:  5
 ```
+
+To get information of all the flags, you can press enter twice after starting the program.
+Example:
+```
+>>ids.exe
+Введите ID (каждый на новой строке). Для завершения введите пустую строку:
+
+ID не переданы
+Пример: ids.exe -q single 12312312 232131 334332
+Примеры разделителей:
+  -sep-type comma   -> 1, 2, 3
+  -sep-type space   -> 1 2 3
+  -sep-type newline -> 1\n2\n3
+  -sep-type sql     -> 1,\n2,\n3
+
+SQL режим:
+  -sql                - включить формирование SQL запроса
+  -table имя_таблицы  - указать таблицу
+  -column имя_колонки - указать колонку (по умолчанию 'id')
+  Пример: ids.exe -sql -table users -column user_id 123 456
+  -trim-ext .xml    - удалить расширение .xml у файлов
+  -trim-ext .xml,.txt - удалить несколько расширений
+  -column string
+        Имя колонки для SQL запроса (по умолчанию 'id') (default "id")
+  -q string
+        Тип кавычек: none, single, double (default "none")
+  -sep string
+        Разделитель (default ", ")
+  -sep-type string
+        Тип разделителя: comma, space, newLine, sql, custom (default "custom")
+  -sql
+        Режим SQL запроса: true or false
+  -table string
+        Имя таблицы для SQL запроса
+  -trim-all-ext
+        Удалить все расширения файлов
+  -trim-ext string
+        Удалить расширение файлов (например: .xml, .txt)
+
+```

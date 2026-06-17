@@ -64,28 +64,24 @@ func main() {
 	}
 
 	if *trimExt != "" {
-		// Разделяем расширения по запятой
 		exts := strings.Split(*trimExt, ",")
 
 		trimmedIds := make([]string, 0, len(ids))
 		for _, id := range ids {
 			originalId := id
 			for _, ext := range exts {
-				ext = strings.TrimSpace(ext) // убираем пробелы
+				ext = strings.TrimSpace(ext)
 				if ext == "" {
 					continue
 				}
 				if !strings.HasPrefix(ext, ".") {
 					ext = "." + ext
 				}
-				// Удаляем расширение
 				id = strings.TrimSuffix(id, ext)
 			}
-			// Если ID изменился или содержал точку, сохраняем
 			if id != originalId {
 				trimmedIds = append(trimmedIds, id)
 			} else {
-				// Если не изменился, возможно расширение не подошло
 				trimmedIds = append(trimmedIds, originalId)
 			}
 		}

@@ -15,6 +15,8 @@ func main() {
 	sql := flag.Bool("sql", false, "Режим SQL запроса: true or false")
 	table := flag.String("table", "", "Имя таблицы для SQL запроса")
 	column := flag.String("column", "id", "Имя колонки для SQL запроса (по умолчанию 'id')")
+	trimExt := flag.String("trim-ext", "", "Удалить расширение файлов (например: .xml, .txt)")
+	trimAllExt := flag.Bool("trim-all-ext", false, "Удалить все расширения файлов")
 	flag.Parse()
 
 	var ids []string
@@ -55,8 +57,47 @@ func main() {
 		fmt.Println("  -table имя_таблицы  - указать таблицу")
 		fmt.Println("  -column имя_колонки - указать колонку (по умолчанию 'id')")
 		fmt.Println("  Пример: ids.exe -sql -table users -column user_id 123 456")
+		fmt.Println("  -trim-ext .xml    - удалить расширение .xml у файлов")
+		fmt.Println("  -trim-ext .xml,.txt - удалить несколько расширений")
 		flag.PrintDefaults()
 		return
+	}
+
+	if *trimExt != "" {
+		// Разделяем расширения по запятой
+		exts := strings.Split(*trimExt, ",")
+
+		trimmedIds := make([]string, 0, len(ids))
+		for _, id := range ids {
+			originalId := id
+			for _, ext := range exts {
+				ext = strings.TrimSpace(ext) // убираем пробелы
+				if ext == "" {
+					continue
+				}
+				if !strings.HasPrefix(ext, ".") {
+					ext = "." + ext
+				}
+				// Удаляем расширение
+				id = strings.TrimSuffix(id, ext)
+			}
+			// Если ID изменился или содержал точку, сохраняем
+			if id != originalId {
+				trimmedIds = append(trimmedIds, id)
+			} else {
+				// Если не изменился, возможно расширение не подошло
+				trimmedIds = append(trimmedIds, originalId)
+			}
+		}
+		ids = trimmedIds
+	}
+
+	if *trimAllExt {
+		for i, id := range ids {
+			if idx := strings.LastIndex(id, "."); idx != -1 {
+				ids[i] = id[:idx]
+			}
+		}
 	}
 
 	var result []string
@@ -108,6 +149,7 @@ func main() {
 	} else {
 		output = strings.Join(result, finalSeparator)
 	}
+
 	fmt.Println(output)
 	fmt.Println("Обработано IDs: ", countIds)
 }
